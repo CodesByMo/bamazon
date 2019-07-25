@@ -41,7 +41,7 @@ function askCustomer() {
             message: "How many would you like to purchase?"
         }
     ]).then(function (res) {
-        console.log(res.product, res.quantity);
+        console.log("1 " + res.product, res.quantity);
         calculateDB(res.product, parseInt(res.quantity));
     });
 };
@@ -60,25 +60,27 @@ function check_db() {
 // if quanity is purchasable, update bamazon_db, decrement item quanity(s)
 // show total price of order/purchase
 function calculateDB(itemId, stock) {
-    console.log("stock 1:  " + stock);
+    // console.log("stock 1:  " + stock);
     connection.query("select * from products where item_id =" + itemId, function (err, res) {
-        console.log("Stock 2: " + stock);
+        // console.log("Stock 2: " + stock);
         var stock_quanity = res[0].stock_quanity;
         if (!(stock <= stock_quanity && stock > -1)) {
             console.log("Insufficient quanity!");
         } else {
-            console.log("stock 3: " + stock);
-            console.log(res[0].stock_quanity);
+            // console.log("stock 3: " + stock);
+            // console.log("2 " + res[0].stock_quanity);
             var math = res[0].stock_quanity - stock;
-            console.log(math);
+            // console.log(math);
             var total = stock * res[0].price;
-            console.log("total " + total);
-            console.log("stock " + stock);
-            console.log("price " + res[0].price);
+            console.log("Price per item: $" + res[0].price);
+            console.log("Your total is: $" + total.toFixed(2));
+            console.log("Thank you for shopping at Bamazon!");
             connection.query("update products set stock_quanity =" + math + " where item_id =" + itemId, function (err, res) {
                 // console.log(res);
-                // console.log(err);
+                // console.log(err)
             });
         }
+        process.exit(1);
+
     });
-}
+};
